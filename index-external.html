@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload to google</title>
+</head>
+<body>
+
+<h1>File Upload</h1>
+<form method="post" id="send_to_google" name="send_to_google" enctype="multipart/form-data">
+    <label for="file">Upload File</label>
+    <input type="file" id="file" name="file"><br>
+    <input type="button" id="btnFrmGcs5" value="Click To Upload">
+</form>
+
+<script>
+    function sendfile() {
+        let formData = new FormData(document.forms.send_to_google);
+        fetch('http://45.84.227.202/gcs5.php', {
+                method: 'POST',
+                body: formData
+            }
+        )
+            // .then( data => console.log(data))
+            .then(r => r.json())
+            .then(return_files => {
+                console.log(return_files);
+
+            })
+    }
+
+    function ready() {
+        document.getElementById('btnFrmGcs5').addEventListener('click', sendfile);
+    }
+
+    document.addEventListener("DOMContentLoaded", ready);
+</script>
+
+</body>
+</html>

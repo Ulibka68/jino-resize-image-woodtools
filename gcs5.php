@@ -5,11 +5,8 @@ header('Access-Control-Max-Age: 86400');
 header('Content-Type: application/json');
 
 # Подключаем autoloader для GCS
-require __DIR__ . '/vendor/autoload.php';
-require_once 'resize.php';
+require_once 'resize2.php';
 
-# Подключаем необходимый класс для работы
-use Google\Cloud\Storage\StorageClient;
 
 function GUID()
 {
