@@ -1,0 +1,12 @@
+RewriteEngine off
+# RewriteRule ^$ hello.html [L]
+# add custom header to all requests
+# DefaultLanguage ru-RU
+# кеш на 5 секунд
+Header set Cache-Control "max-age=1, public"
+Header add Access-Control-Allow-Origin: "*"
+Header add Access-Control-Allow-Methods: "GET,POST,OPTIONS,DELETE,PUT"
+# https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
+# Bypassing additional restrictions
+Header add Access-Control-Allow-Headers: "Accept"
+Header add Access-Control-Max-Age: 86400
