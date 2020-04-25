@@ -70,53 +70,22 @@ class Image
     }
 }
 
-function resizeImage( $img_path ) {
+function createWritableFolder($folder)
+{
+    $dir_root = dirname($folder);
+    if($folder != '.' && $folder != '/' ) {
+        createWritableFolder(dirname($folder));
+    }
+    if (file_exists($folder)) {
+        return is_writable($folder);
+    }
+    return  mkdir($folder, 0777, true);
+}
 
-    $fnameA = pathinfo($img_path);
-    // print_r($fnameA);
-    // die;
-    $name_1600 = $fnameA['dirname'] . "/" . $fnameA['basename'] . '-1600.jpg';
-    $name_350 = $fnameA['dirname'] . "/" . $fnameA['basename'] . '-350.jpg';
+function resizeImage( $img_path,$name_350 , $name_1600) {
+    createWritableFolder(dirname($name_350));
 
     Image::hook($img_path)->resize(1600)->save($name_1600, 70);
     Image::hook($img_path)->resize(350)->save($name_350, 90);
-
-    return ['1600' => $name_1600, '350' => $name_350];
-
 }
 
-function test()
-{
-    $start = microtime(true);
-    Image::hook('./img/20200201_185628.jpg')->resize(1600)->save('./img/_1.jpg', 70);
-    $end = microtime(true);
-    $runtime = $end - $start;
-    echo "Время : " . number_format($runtime, 2) . " для " . ' ' . '<br>' . PHP_EOL;
-}
-
-function resizeDir() {
-    $directory = './img/';
-
-    $scanned_directory = array_diff(scandir($directory),["..", "."]);
-    foreach( $scanned_directory as $fileT ) {
-        $findme = "jpg-350";
-//        print_r($fileT);
-        if (strpos($fileT,$findme) !== false) {
-            continue;
-        }
-        $findme = "jpg-1600";
-        if (strpos($fileT,$findme) !== false) {
-            continue;
-        }
-
-        $start = microtime(true);
-        resizeImage( $directory . $fileT );
-
-        $end = microtime(true);
-        $runtime = $end - $start;
-        echo "Время : " . number_format($runtime,2) .  " для " . $fileT . '<br>' . PHP_EOL;
-    }
-}
-
-
-resizeDir();
