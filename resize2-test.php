@@ -17,7 +17,7 @@ function test_create_folder() {
     $rst = createWritableFolder('./img/2/1/a.txt');
     echo 'результат : ' . $rst;
 }
-//test_create_folder();
+test_create_folder();
 
 function resizeDir() {
     $directory = './img/';
