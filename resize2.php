@@ -4,7 +4,7 @@
 
 class Image
 {
-    private $source = false, $temp = false;
+    private $source = false, $temp = false, $orientation = 0;
 
     /**
      * hook file
@@ -17,15 +17,45 @@ class Image
 
         $createFunc = 'imagecreatefrom' . strtolower(str_replace('image/', '', $info['mime']));
         $this->source = $createFunc($image);
+		
+		$exif = exif_read_data($image);
+		if (!empty($exif['Orientation'])) {			
+			$this->orientation = $exif['Orientation'];
+		}
 
         return $this; //->source = $createFunc($image);
     }
 
+	public function image_fix_orientation()
+	{
+		
+		if (!$this->source) {
+			throw new Exception("error image");
+		}
+		
+		if ($this->orientation) {
+			switch ($this->orientation) {
+				case 3:
+					$this->source = imagerotate($this->source, 180, 0);
+					break;
+				case 6:
+					$this->source = imagerotate($this->source, -90, 0);
+					break;
+				case 8:
+					$this->source = imagerotate($this->source, 90, 0);
+					break;
+			}
+		}
+			
+	}
+	
     public function resize($width)
     {
         if (!$this->source) {
             throw new Exception("error image");
         }
+		
+		$this->image_fix_orientation();
 
         if (imagesx($this->source) < $width) {
             $width = imagesx($this->source);
@@ -84,8 +114,8 @@ function createWritableFolder($folder)
 
 function resizeImage( $img_path,$name_350 , $name_1600) {
     createWritableFolder(dirname($name_350));
-
-    Image::hook($img_path)->resize(1600)->save($name_1600, 70);
+	
+	Image::hook($img_path)->resize(1600)->save($name_1600, 70);
     Image::hook($img_path)->resize(350)->save($name_350, 90);
 }
 
