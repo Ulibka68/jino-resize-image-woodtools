@@ -14,13 +14,19 @@ class Image
         if (!$info = getimagesize($image)) {
             throw new Exception("error image");
         }
+		
+		error_reporting(0);
 
         $createFunc = 'imagecreatefrom' . strtolower(str_replace('image/', '', $info['mime']));
         $this->source = $createFunc($image);
 		
-		$exif = exif_read_data($image);
-		if (!empty($exif['Orientation'])) {			
-			$this->orientation = $exif['Orientation'];
+		if ($createFunc == 'imagecreatefromjpeg') {
+			$exif = exif_read_data($image);
+			if ($exif) {
+				if (!empty($exif['Orientation'])) {			
+					$this->orientation = $exif['Orientation'];
+				}
+			}
 		}
 
         return $this; //->source = $createFunc($image);
