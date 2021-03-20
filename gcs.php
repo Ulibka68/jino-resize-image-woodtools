@@ -40,11 +40,10 @@ if(isset($_FILES) &&  $_FILES['file']['error'] == 0) {
     }
 
 //    сделать ресайз
-//    $root_dir = "/domains/ggvlasov.myjino.ru/";
-//    $root_dir = "/";
     $root_dir = './';
 
-    $GCP_name ='images/' . date("Y-m-d") . '/' . GUID() ;
+//    $GCP_name ='images/' . date("Y-m-d") . '/' . GUID() ;
+    $GCP_name ='images/' . date("Y"). '/'.date("m") . '/'.date("d") .'/' . GUID() ;
 
 
     $resize_files =  resizeImage($_FILES['file']['tmp_name'],$root_dir . $GCP_name . '-350.jpg',$root_dir . $GCP_name . '-1600.jpg') ;
